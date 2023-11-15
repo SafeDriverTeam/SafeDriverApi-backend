@@ -1,7 +1,7 @@
 ## Setting up the project
 1. Clone the repository using git.
 ```
-git clone https://github.com/SparkSquad/xTicket-api
+git clone https://github.com/SafeDriverTeam/SafeDriverApi-backend
 ```
 2. Install project dependencies.
 ```
