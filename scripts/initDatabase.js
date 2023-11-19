@@ -22,10 +22,10 @@ const initUserInitialData = async () => {
     try {
         await users.create({
             name: "Administrador",
-            surnames: "",
-            email: "employee@gmail.com",
+            surnames: "Employee",
+            email: "admin@gmail.com",
             password: await calculateSHA256Hash("Admin1234."),
-            type: "employee"
+            type: "admin"
         });
         logger.info('Admin user created successfully.');
     }

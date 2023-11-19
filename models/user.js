@@ -33,7 +33,7 @@ module.exports = (sequelize) => {
         },
     
         type: {
-            type: DataTypes.ENUM('admin', 'driver', 'employee'),
+            type: DataTypes.ENUM('admin', 'driver', 'executive', 'adjuster'),
             allowNull: false
         }
     }
