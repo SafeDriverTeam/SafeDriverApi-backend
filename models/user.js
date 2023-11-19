@@ -56,5 +56,28 @@ module.exports = (sequelize) => {
         }
     });
 
+    Reflect.defineProperty(model, 'registerUser', {
+        value: async function(name, surnames, email, password, type) {
+            const t = await sequelize.transaction();
+            
+            try {
+                const user = await this.create({
+                    name,
+                    surnames,
+                    email,
+                    password,
+                    type
+                }, { transaction: t });
+    
+                await t.commit();
+                return user;
+                
+            } catch(error) {
+                await t.rollback();
+                throw error;
+            }
+        }
+    });
+
     return model;
 }
