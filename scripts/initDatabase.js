@@ -28,6 +28,15 @@ const initUserInitialData = async () => {
             type: "admin"
         });
         logger.info('Admin user created successfully.');
+
+        await users.create({
+            name: "Executive",
+            surnames: "Employee",
+            email: "executive@gmail.com",
+            password: await calculateSHA256Hash("Executive1234."),
+            type: "executive"
+        });
+        logger.info('Executive user created successfully.');
     }
     catch (error) {
         logger.fatal('Unable to create user:');
