@@ -24,6 +24,7 @@ class Server {
 
     #initRoutes() {
         this.#setRouteHandler("/auth", "./routes/auth.js");
+        this.#setRouteHandler("/report", "./routes/report.js");
     }
 
     start() {

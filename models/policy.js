@@ -25,7 +25,7 @@ module.exports = (sequelize) => {
         },
         userId: {
             type: DataTypes.INTEGER,
-            allowNull: false
+            allowNull: true
         }
     }
 
@@ -36,6 +36,7 @@ module.exports = (sequelize) => {
     };
 
     let model = sequelize.define('policy', fields, options);
+    model.belongsTo(sequelize.models.vehicle, { foreignKey: 'vehicleId' });
 
     Reflect.defineProperty(model, 'getByPolicyId', {
         value: async function(policyId) {

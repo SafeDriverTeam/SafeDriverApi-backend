@@ -32,10 +32,24 @@ module.exports = (sequelize) => {
     };
 
     let model = sequelize.define('report', fields, options);
+    model.belongsTo(sequelize.models.policy, { foreignKey: 'policyId' });
+    model.belongsTo(sequelize.models.user, { foreignKey: 'userId'});
 
     Reflect.defineProperty(model, 'getByReportId', {
         value: async function(reportId) {
             return await this.findOne({
+                where: {
+                    reportId: reportId
+                }
+            });
+        }
+    });
+
+    Reflect.defineProperty(model, 'setAdjuster', {
+        value: async function(reportId, adjusterId) {
+            return await this.update({
+                userId: adjusterId
+            }, {
                 where: {
                     reportId: reportId
                 }
@@ -57,9 +71,18 @@ module.exports = (sequelize) => {
 
     Reflect.defineProperty(model, 'updateReportJudgment', {
         value: async function(reportId, judgment) {
-            return await this.update({
-                judgment: judgment,
-            }, {
+            return this.update(
+                { judgment: judgment }, 
+                { where: 
+                    { reportId: reportId } 
+            });
+        }
+    });
+    
+
+    Reflect.defineProperty(model, 'deleteReport', {
+        value: async function(reportId) {
+            return await this.destroy({
                 where: {
                     reportId: reportId
                 }
@@ -67,11 +90,11 @@ module.exports = (sequelize) => {
         }
     });
 
-    Reflect.defineProperty(model, 'deleteReport', {
-        value: async function(reportId) {
-            return await this.destroy({
+    Reflect.defineProperty(model, 'getByAdjusterId', {
+        value: async function(userId) {
+            return await this.findAll({
                 where: {
-                    reportId: reportId
+                    userId: userId
                 }
             });
         }

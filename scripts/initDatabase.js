@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const { sequelize, users } = require('../models');
+const { sequelize, users, vehicles, policies, reports } = require('../models');
 const Logger = require('../utils/Logger');
 const { calculateSHA256Hash } = require('../utils/crypto.js')
 
@@ -37,6 +37,55 @@ const initUserInitialData = async () => {
             type: "executive"
         });
         logger.info('Executive user created successfully.');
+
+        await users.create({
+            name: "Adjuster",
+            surnames: "Employee",
+            email: "adjuster@gmail.com",
+            password: await calculateSHA256Hash("Adjuster1234."),
+            type: "adjuster"
+        });
+        logger.info('Adjuster user created successfully.');
+
+        await users.create({
+            name: "Driver",
+            surnames: "Employee",
+            email: "driver@gmail.com",
+            password: await calculateSHA256Hash("Driver1234."),
+            type: "driver"
+        });
+        logger.info('Driver user created successfully.');
+
+        await vehicles.create({
+            brand: "Ford",
+            model: "Focus",
+            year: 2010,
+            color: "Blue",
+            plate: "1234ABC",
+            userId: 4
+        });
+        logger.info('Vehicle created successfully.');
+
+        await policies.create({
+            acquisitionDate: new Date(),
+            amount: 10000,
+            duration: 12,
+            vehicleId: 1,
+            userId: 4
+        });
+        logger.info('Policy created successfully.');
+
+        await reports.create({
+            declaration: "I crashed my car",
+            date: new Date(),
+            place: "Calle 123",
+            judgment: "",
+            policyId: 1,
+            userId: null,
+            vehicleId: 1
+        });
+        logger.info('Report created successfully.');
+
     }
     catch (error) {
         logger.fatal('Unable to create user:');
