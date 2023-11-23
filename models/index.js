@@ -11,8 +11,14 @@ let sequelize = new Sequelize(database.name, database.user, database.password, {
 });
 
 const users = require('./user')(sequelize);
+const vehicles = require('./vehicle')(sequelize);
+const policies = require('./policy')(sequelize);
+const reports = require('./report')(sequelize);
 
 module.exports = { 
     sequelize,
-    users
+    users,
+    vehicles,
+    policies,
+    reports
 };
