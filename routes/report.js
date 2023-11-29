@@ -21,7 +21,9 @@ router.get('/getByAdjuster/:adjusterId', async (req, res) => {
             });
         }
 
-        return res.status(200).json(reportList);
+        return res.status(200).json(
+            {reportList});
+
     } catch(error) {
         return res.status(500).json({
             message: 'Unable to get report'});
