@@ -22,6 +22,14 @@ module.exports = (sequelize) => {
         judgment: {
             type: DataTypes.STRING,
             allowNull: false
+        },
+        involved: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        vehiclesInvolved: {
+            type: DataTypes.STRING,
+            allowNull: false
         }
     }
 
@@ -58,13 +66,15 @@ module.exports = (sequelize) => {
     });
 
     Reflect.defineProperty(model, 'createReport', {
-        value: async function(declaration, date, place, judgment, policyId) {
+        value: async function(declaration, date, place, judgment, policyId, involved, vehiclesInvolved) {
             return await this.create({
                 declaration: declaration,
                 date: date,
                 place: place,
                 judgment: "",
-                policyId: policyId
+                policyId: policyId,
+                involved: involved,
+                vehiclesInvolved: vehiclesInvolved
             });
         }
     });
