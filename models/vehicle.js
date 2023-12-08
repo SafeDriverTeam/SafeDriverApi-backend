@@ -52,10 +52,11 @@ module.exports = (sequelize) => {
     });
 
     Reflect.defineProperty(model, 'createVehicle', {
-        value: async function(brand, model, color, plate, userId) {
+        value: async function(brand, model, year,color, plate, userId) {
             return await this.create({
                 brand: brand,
                 model: model,
+                year: year,
                 color: color,
                 plate: plate,
                 userId: userId

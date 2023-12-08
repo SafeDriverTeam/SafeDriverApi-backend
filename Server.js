@@ -36,6 +36,8 @@ class Server {
     #initRoutes() {
         this.#setRouteHandler("/auth", "./routes/auth.js");
         this.#setRouteHandler("/report", "./routes/report.js");
+        this.#setRouteHandler("/vehicle","./routes/vehicle.js");
+        this.#setRouteHandler("/policy", "./routes/policy.js");
     }
 
     start() {
