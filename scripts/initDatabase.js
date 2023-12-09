@@ -1,5 +1,8 @@
 require('dotenv').config();
 
+var currentDate =  new Date();
+var expirationDate = new Date();
+expirationDate.setMonth(currentDate.getMonth() + 12);
 const { sequelize, users, vehicles, policies, reports } = require('../models');
 const Logger = require('../utils/Logger');
 const { calculateSHA256Hash } = require('../utils/crypto.js')
@@ -69,9 +72,10 @@ const initUserInitialData = async () => {
         await policies.create({
             acquisitionDate: new Date(),
             amount: 10000,
-            duration: 12,
+            expirationDate: expirationDate,
             vehicleId: 1,
-            userId: 4
+            userId: 4,
+            typePolicy: 1
         });
         logger.info('Policy created successfully.');
 
@@ -82,7 +86,9 @@ const initUserInitialData = async () => {
             judgment: "",
             policyId: 1,
             userId: null,
-            vehicleId: 1
+            vehicleId: 1,
+            involved: "Martin Perez",
+            vehiclesInvolved: "Ford Focus 2010"
         });
         logger.info('Report created successfully.');
 

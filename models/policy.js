@@ -15,8 +15,8 @@ module.exports = (sequelize) => {
             type: DataTypes.INTEGER,
             allowNull: false
         },
-        duration: {
-            type: DataTypes.INTEGER,
+        expirationDate: {
+            type: DataTypes.DATE,
             allowNull: false
         },
         vehicleId: {
@@ -26,6 +26,10 @@ module.exports = (sequelize) => {
         userId: {
             type: DataTypes.INTEGER,
             allowNull: true
+        },
+        typePolicy: {
+            type: DataTypes.INTEGER,
+            allowNull: false
         }
     }
 
@@ -49,13 +53,14 @@ module.exports = (sequelize) => {
     });
 
     Reflect.defineProperty(model, 'createPolicy', {
-        value: async function(acquisitionDate, amount, duration, vehicleId, userId) {
+        value: async function(acquisitionDate, amount, expirationDate, vehicleId, userId, typePolicy) {
             return await this.create({
                 acquisitionDate: acquisitionDate,
                 amount: amount,
-                duration: duration,
+                expirationDate: expirationDate,
                 vehicleId: vehicleId,
-                userId: userId
+                userId: userId,
+                typePolicy: typePolicy,
             });
         }
     });
