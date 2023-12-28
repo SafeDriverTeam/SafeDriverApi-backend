@@ -34,7 +34,6 @@ router.get('/getPoliciesByUserId/:userId', async (req, res) => {
             message: 'Missing required fields'
         });
     }
-
     try {
         const userPolicies = await policies.getByUserId(userId);
 
