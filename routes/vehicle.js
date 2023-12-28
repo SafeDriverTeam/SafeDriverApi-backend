@@ -22,6 +22,7 @@ router.get('/getVehicleByUserId/:userId', async(req, res)=>{
 
         return res.status(200).json(vehicle);
     }catch(error){
+        console.log(error);
         return res.status(500).json({
             message: 'Unable to get vehicle'});
     }
@@ -62,6 +63,28 @@ router.post('/createVehicle', async (req, res)=>{
     }
 })
 
+router.get('/getByVehicleId/:vehicleId', async(req, res)=>{
+    const{vehicleId}=req.params;
+    if(!vehicleId){
+        return res.status(400).json({
+            message: 'Missing required fields'
+        });
+    }
 
+    try{
+        const vehicle = await vehicles.getByVehicleId(vehicleId);
+
+        if(!vehicle){
+            return res.status(404).json({
+                message: 'Vehicle not found'
+            });
+        }
+        return res.status(200).json(vehicle);
+    }catch(error){
+        return res.status(500).json({
+            message: 'Unable to get vehicle'
+        });
+    }
+})
 
 module.exports = router;

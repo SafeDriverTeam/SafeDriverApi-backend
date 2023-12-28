@@ -38,6 +38,7 @@ class Server {
         this.#setRouteHandler("/report", "./routes/report.js");
         this.#setRouteHandler("/vehicle","./routes/vehicle.js");
         this.#setRouteHandler("/policy", "./routes/policy.js");
+        this.#setRouteHandler("/imageReport", "./routes/imagesReports.js");
     }
 
     start() {

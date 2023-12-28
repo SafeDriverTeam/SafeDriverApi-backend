@@ -14,11 +14,13 @@ const users = require('./user')(sequelize);
 const vehicles = require('./vehicle')(sequelize);
 const policies = require('./policy')(sequelize);
 const reports = require('./report')(sequelize);
+const imagesReports = require('./imagesReports')(sequelize);
 
 module.exports = { 
     sequelize,
     users,
     vehicles,
     policies,
-    reports
+    reports,
+    imagesReports
 };

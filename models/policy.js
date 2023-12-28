@@ -75,7 +75,7 @@ module.exports = (sequelize) => {
         }
     });
 
-    Reflect.defineProperty(model, 'getByVehicleId', {
+    Reflect.defineProperty(model, 'getPolicyByVehicleId', {
         value: async function(vehicleId) {
             return await this.findAll({
                 where: {
@@ -84,6 +84,16 @@ module.exports = (sequelize) => {
             });
         }
     });
+
+    Reflect.defineProperty(model, 'getByPolicyID', {
+        value: async function(policyId) {
+            return await this.findOne({
+                where: {
+                    policyId: policyId
+                }
+            });
+        }
+    })
 
     return model;
 }
