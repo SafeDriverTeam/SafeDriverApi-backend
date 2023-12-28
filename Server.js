@@ -22,15 +22,9 @@ class Server {
         this.app.use(morgan((message) => this.logger.debug({ prefix: "[morgan]", message })));
         this.app.use(express.json());
         var allowedOrigins = ['SafeDriver', 'http://localhost:3000'];
-        this.app.use(cors({
-            origin: function (origin, callback) {
-                if (allowedOrigins.indexOf(origin) === -1) {
-                    callback('Origin not allowed by CORS');
-                } else {
-                    callback(null, true)
-                }
-            }
-        }));
+        
+        this.app.use(cors());//SE CAMBIO POR PRUEBAS
+
     }
 
     #initRoutes() {
@@ -38,6 +32,7 @@ class Server {
         this.#setRouteHandler("/report", "./routes/report.js");
         this.#setRouteHandler("/vehicle","./routes/vehicle.js");
         this.#setRouteHandler("/policy", "./routes/policy.js");
+        
     }
 
     start() {
