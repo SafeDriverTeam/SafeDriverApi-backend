@@ -66,15 +66,16 @@ module.exports = (sequelize) => {
     });
 
     Reflect.defineProperty(model, 'createReport', {
-        value: async function(declaration, date, place, judgment, policyId, involved, vehiclesInvolved) {
+        value: async function(declaration, date, place, judgment, policyId, involved, vehiclesInvolved, userId) {
             return await this.create({
                 declaration: declaration,
                 date: date,
                 place: place,
-                judgment: "",
+                judgment: judgment,
                 policyId: policyId,
                 involved: involved,
-                vehiclesInvolved: vehiclesInvolved
+                vehiclesInvolved: vehiclesInvolved,
+                userId: userId,
             });
         }
     });
@@ -101,6 +102,16 @@ module.exports = (sequelize) => {
     });
 
     Reflect.defineProperty(model, 'getByAdjusterId', {
+        value: async function(userId) {
+            return await this.findAll({
+                where: {
+                    userId: userId
+                }
+            });
+        }
+    });
+
+    Reflect.defineProperty(model, 'getByUserId', {
         value: async function(userId) {
             return await this.findAll({
                 where: {

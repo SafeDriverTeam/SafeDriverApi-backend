@@ -57,9 +57,8 @@ router.get('/getByReportId/:reportId', async (req, res) => {
 
 
 router.post('/createReport', async (req, res) => {
-    const { declaration, date, place, judgment, policyId } = req.body;
-
-    if(!declaration || !date || !place || !judgment || !policyId) {
+    const { declaration, date, place, judgment, policyId,involved, vehiclesInvolved, userId } = req.body;
+    if(!declaration || !date || !place || !judgment || !policyId || !involved || !vehiclesInvolved || !userId) {
         return res.status(400).json({
             message: 'Missing required fields'
         });
@@ -71,10 +70,13 @@ router.post('/createReport', async (req, res) => {
             date,
             place,
             judgment,
-            policyId
+            policyId,
+            involved,
+            vehiclesInvolved,
+            userId,
         );
 
-        if(!report) {
+        if(!report) {   
             return res.status(500).json({
                 message: 'Unable to create report'
             });
@@ -145,15 +147,37 @@ router.put('/updateReportJudgment', async (req, res) => {
 
 
     } catch(error) {
+        console.log(error);
         return res.status(500).json({
             message: 'Unable to update report'
         });
     }
-
-
-
 });
 
+router.get('/getByUserId/:userId', async (req, res) => {
+    const { userId } = req.params;
+
+    if (!userId) {
+        return res.status(400).json({
+            message: 'Missing required fields'
+        });
+    }
+
+    try {
+        const report = await reports.getByUserId(userId);
+
+        if(!report) {
+            return res.status(404).json({
+                message: 'Report not found'
+            });
+        }
+
+        return res.status(200).json(report);
+    } catch(error) {
+        return res.status(500).json({
+            message: 'Unable to get report'});
+    }
+});
 
 
 module.exports = router;

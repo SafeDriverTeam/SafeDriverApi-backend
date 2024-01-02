@@ -3,7 +3,7 @@ require('dotenv').config();
 var currentDate =  new Date();
 var expirationDate = new Date();
 expirationDate.setMonth(currentDate.getMonth() + 12);
-const { sequelize, users, vehicles, policies, reports } = require('../models');
+const { sequelize, users, vehicles, policies, reports, imagesReports} = require('../models');
 const Logger = require('../utils/Logger');
 const { calculateSHA256Hash } = require('../utils/crypto.js')
 
@@ -85,12 +85,17 @@ const initUserInitialData = async () => {
             place: "Calle 123",
             judgment: "",
             policyId: 1,
-            userId: null,
-            vehicleId: 1,
             involved: "Martin Perez",
-            vehiclesInvolved: "Ford Focus 2010"
-        });
+            vehiclesInvolved: "Ford Focus 2010",
+            userId: null
+          });
         logger.info('Report created successfully.');
+
+        await imagesReports.create({
+            image: "image1",
+            reportId: 1,
+        });
+        logger.info('Image created successfully.');
 
     }
     catch (error) {
