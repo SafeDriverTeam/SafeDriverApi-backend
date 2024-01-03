@@ -1,32 +1,46 @@
 const { Router } = require('express');
 const { reports } = require('../models');
-
+const { verifyJsonWebToken } = require('../utils/crypto');
 const router = Router();
 
 router.get('/getByAdjuster/:adjusterId', async (req, res) => {
     const { adjusterId } = req.params;
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
 
-    if (!adjusterId) {
-        return res.status(400).json({
-            message: 'Missing required fields'
-        });
+    if (!token) {
+        return res.status(401).json('Unauthorized user');
     }
-    
-    try {
-        const reportList = await reports.getByAdjusterId(adjusterId);
 
-        if(!reportList) {
-            return res.status(404).json({
-                message: 'Report not found'
+    try {
+        const decoded = await verifyJsonWebToken(token);
+        if (!decoded) {
+            return res.status(401).json('Unauthorized user');
+        }
+
+        if (!adjusterId) {
+            return res.status(400).json({
+                message: 'Missing required fields'
             });
         }
 
-        return res.status(200).json(
-            {reportList});
+        try {
+            const reportList = await reports.getByAdjusterId(adjusterId);
 
-    } catch(error) {
-        return res.status(500).json({
-            message: 'Unable to get report'});
+            if (!reportList) {
+                return res.status(404).json({
+                    message: 'Report not found'
+                });
+            }
+
+            return res.status(200).json({ reportList });
+        } catch (error) {
+            return res.status(500).json({
+                message: 'Unable to get report'
+            });
+        }
+    } catch (error) {
+        return res.status(400).json('Token not valid');
     }
 });
 

@@ -23,5 +23,6 @@ module.exports = {
         },
     },
     webTokenSecret: process.env.WEB_TOKEN_SECRET || "secret",
-    tokenExpirationTime: process.env.TOKEN_EXPIRATION_TIME || 3600,
+    tokenExpirationTime: process.env.TOKEN_EXPIRATION_TIME || '3600s',
+    tokenExpirationTimeN: process.env.TOKEN_EXPIRATION_TIME_N || 3600
 }

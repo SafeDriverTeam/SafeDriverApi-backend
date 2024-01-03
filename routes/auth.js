@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const { users } = require('../models');
 const { calculateSHA256Hash, generateJsonWebToken } = require('../utils/crypto');
-const { tokenExpirationTime } = require('../config');
+const { tokenExpirationTimeN } = require('../config');
 
 const router = Router();
 
@@ -20,8 +20,9 @@ router.post('/login', async (req, res) => {
     return res.status(200).json({
         message: 'Login successful',
         token,
-        expires: new Date(Date.now() + tokenExpirationTime).toString(),
+        expiration: new Date(Date.now() + tokenExpirationTimeN * 1000),
         user: {
+            userId: user.userId,
             name: user.name,
             surnames: user.surnames,
             email: user.email,

@@ -12,24 +12,22 @@ function generateJsonWebToken(userEmail) {
     const payload = {
         username: userEmail
     };
-    return jwt.sign(payload, config.webTokenSecret, { expiresIn: config.tokenExpirationTime });
+    console.log(config.tokenExpirationTime);   
+    return jwt.sign(payload, config.webTokenSecret, { expiresIn:  config.tokenExpirationTime });
 }
 
-function verifyJsonWebToken(token) {
+async function verifyJsonWebToken(token) {
     try {
-        let username;
-        jwt.verify(token, process.env.TOKEN_SECRET_KEY, (err, payload) => {
-            if(err) {
+        let username
+        jwt.verify(token, config.webTokenSecret, function(err, decoded) {
+            if (err) {
                 return null;
             }
-            else {
-                username = payload.username;
-            }
-        })
+            username = decoded;
+        });
         return username;
-    } 
-    catch(error) {
-        log.debug(error.message);
+    } catch (error) {
+        console.error(error.message);
         return null;
     }
 }
