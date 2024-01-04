@@ -40,7 +40,7 @@ router.post('/signup', async (req, res) => {
         });
     }
 
-    const user = await users.getByEmail(email);
+    let user = await users.getByEmail(email);
 
     if(user) {
         return res.status(409).json({
@@ -49,14 +49,27 @@ router.post('/signup', async (req, res) => {
     }
 
     try {
-        await users.registerUser(
+        user = await users.registerUser(
             name, 
             surnames, 
             email, 
             await calculateSHA256Hash(password), 
             "driver");
+        
+        console.log(user);
+        const token = generateJsonWebToken(user.email, user.type);
+        
         return res.status(201).json({
-            message: 'User created successfully'
+            message: 'User created successfully',
+            token,
+            expiration: new Date(Date.now() + tokenExpirationTimeN * 1000),
+            user: {
+                userId: user.userId,
+                name: user.name,
+                surnames: user.surnames,
+                email: user.email,
+                type: user.type
+            }
         });
     }
     catch(error) {
