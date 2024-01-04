@@ -8,26 +8,25 @@ async function calculateSHA256Hash(text) {
     return hashString.digest("hex");
 };
 
-function generateJsonWebToken(userEmail) {
+function generateJsonWebToken(userEmail, userType) {
     const payload = {
-        username: userEmail
+        email: userEmail,
+        type: userType
     };
-    console.log(config.tokenExpirationTime);   
     return jwt.sign(payload, config.webTokenSecret, { expiresIn:  config.tokenExpirationTime });
 }
 
 async function verifyJsonWebToken(token) {
     try {
-        let username
+        let decodedToken;
         jwt.verify(token, config.webTokenSecret, function(err, decoded) {
             if (err) {
-                return null;
+                decodedToken = null;
             }
-            username = decoded;
+            decodedToken = decoded;
         });
-        return username;
+        return decodedToken;
     } catch (error) {
-        console.error(error.message);
         return null;
     }
 }
