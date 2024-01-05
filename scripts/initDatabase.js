@@ -87,7 +87,8 @@ const initUserInitialData = async () => {
             policyId: 1,
             involved: "Martin Perez",
             vehiclesInvolved: "Ford Focus 2010",
-            userId: 3
+            userId: 3,
+            driverId: 4
           });
         logger.info('Report created successfully.');
 

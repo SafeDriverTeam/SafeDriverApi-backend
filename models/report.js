@@ -30,6 +30,10 @@ module.exports = (sequelize) => {
         vehiclesInvolved: {
             type: DataTypes.STRING,
             allowNull: false
+        },
+        driverId: {
+            type: DataTypes.INTEGER,
+            allowNull: false
         }
     }
 
@@ -66,7 +70,7 @@ module.exports = (sequelize) => {
     });
 
     Reflect.defineProperty(model, 'createReport', {
-        value: async function(declaration, date, place, judgment, policyId, involved, vehiclesInvolved, userId) {
+        value: async function(declaration, date, place, judgment, policyId, involved, vehiclesInvolved, userId, driverId) {
             return await this.create({
                 declaration: declaration,
                 date: date,
@@ -76,6 +80,7 @@ module.exports = (sequelize) => {
                 involved: involved,
                 vehiclesInvolved: vehiclesInvolved,
                 userId: userId,
+                driverId: driverId
             });
         }
     });
@@ -111,11 +116,11 @@ module.exports = (sequelize) => {
         }
     });
 
-    Reflect.defineProperty(model, 'getByUserId', {
-        value: async function(userId) {
+    Reflect.defineProperty(model, 'getByDriverId', {
+        value: async function(driverId) {
             return await this.findAll({
                 where: {
-                    userId: userId
+                    driverId: driverId
                 }
             });
         }

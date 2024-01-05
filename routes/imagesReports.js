@@ -1,11 +1,18 @@
 const {Router} = require('express');
 const {imagesReports} = require('../models');
+const { verifyJsonWebToken } = require('../utils/crypto');
 
 const router = Router();
 
 router.get('/getByReportId/:reportId', async(req, res)=>{
     const{reportId}=req.params;
-
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+    const decoded = await verifyJsonWebToken(token);
+        
+    if (!decoded || decoded.type != 'driver') {
+        return res.status(401).json('Unauthorized user');
+    }
     if(!reportId){
         return res.status(400).json({
             message: 'Missing required fields'
@@ -31,7 +38,13 @@ router.get('/getByReportId/:reportId', async(req, res)=>{
 
 router.post('/createImageReport', async(req, res)=>{
     const{image, reportId}=req.body;
-
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+    const decoded = await verifyJsonWebToken(token);
+        
+    if (!decoded || decoded.type != 'driver') {
+        return res.status(401).json('Unauthorized user');
+    }
     if(!image || !reportId){
         return res.status(400).json({
             message: 'Missing required fields'

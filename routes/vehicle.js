@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const { vehicles } = require('../models');
+const { verifyJsonWebToken } = require('../utils/crypto');
 
 const router = Router();
 
@@ -65,6 +66,13 @@ router.post('/createVehicle', async (req, res)=>{
 
 router.get('/getByVehicleId/:vehicleId', async(req, res)=>{
     const{vehicleId}=req.params;
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+    const decoded = await verifyJsonWebToken(token);
+        
+    if (!decoded || decoded.type != 'driver') {
+        return res.status(401).json('Unauthorized user');
+    }
     if(!vehicleId){
         return res.status(400).json({
             message: 'Missing required fields'

@@ -7,40 +7,32 @@ router.get('/getByAdjuster/:adjusterId', async (req, res) => {
     const { adjusterId } = req.params;
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1]
-
-    if (!token) {
+    const decoded = await verifyJsonWebToken(token);
+        
+    if (!decoded || decoded.type != 'adjuster') {
         return res.status(401).json('Unauthorized user');
     }
 
+    if (!adjusterId) {
+        return res.status(400).json({
+            message: 'Missing required fields'
+        });
+    }
+
     try {
-        const decoded = await verifyJsonWebToken(token);
-        if (!decoded) {
-            return res.status(401).json('Unauthorized user');
-        }
+        const reportList = await reports.getByAdjusterId(adjusterId);
 
-        if (!adjusterId) {
-            return res.status(400).json({
-                message: 'Missing required fields'
+        if (!reportList) {
+            return res.status(404).json({
+                message: 'Report not found'
             });
         }
 
-        try {
-            const reportList = await reports.getByAdjusterId(adjusterId);
-
-            if (!reportList) {
-                return res.status(404).json({
-                    message: 'Report not found'
-                });
-            }
-
-            return res.status(200).json({ reportList });
-        } catch (error) {
-            return res.status(500).json({
-                message: 'Unable to get report'
-            });
-        }
+        return res.status(201).json({ reportList });
     } catch (error) {
-        return res.status(400).json('Token not valid');
+        return res.status(500).json({
+            message: 'Unable to get report'
+        });
     }
 });
 
@@ -71,9 +63,16 @@ router.get('/getByReportId/:reportId', async (req, res) => {
 
 
 router.post('/createReport', async (req, res) => {
-    const { declaration, date, place, judgment, policyId,involved, vehiclesInvolved, userId } = req.body;
-    if(!declaration || !date || !place || !judgment || !policyId || !involved || !vehiclesInvolved || !userId) {
-        return res.status(400).json({
+    const { declaration, date, place, judgment, policyId,involved, vehiclesInvolved, userId, driverId } = req.body;
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+    const decoded = await verifyJsonWebToken(token);
+        
+    if (!decoded || decoded.type != 'driver') {
+        return res.status(401).json('Unauthorized user');
+    }
+    if(!declaration || !date || !place || !judgment || !policyId || !involved || !vehiclesInvolved || !userId || !driverId) {
+        return res.status(405).json({
             message: 'Missing required fields'
         });
     }
@@ -88,6 +87,7 @@ router.post('/createReport', async (req, res) => {
             involved,
             vehiclesInvolved,
             userId,
+            driverId
         );
 
         if(!report) {   
@@ -168,17 +168,23 @@ router.put('/updateReportJudgment', async (req, res) => {
     }
 });
 
-router.get('/getByUserId/:userId', async (req, res) => {
-    const { userId } = req.params;
-
-    if (!userId) {
+router.get('/getByDriverId/:driverId', async (req, res) => {
+    const { driverId } = req.params;
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+    const decoded = await verifyJsonWebToken(token);
+        
+    if (!decoded || decoded.type != 'driver') {
+        return res.status(401).json('Unauthorized user');
+    }
+    if (!driverId) {
         return res.status(400).json({
             message: 'Missing required fields'
         });
     }
 
     try {
-        const report = await reports.getByUserId(userId);
+        const report = await reports.getByDriverId(driverId);
 
         if(!report) {
             return res.status(404).json({
@@ -186,7 +192,7 @@ router.get('/getByUserId/:userId', async (req, res) => {
             });
         }
 
-        return res.status(200).json(report);
+        return res.status(201).json(report);
     } catch(error) {
         return res.status(500).json({
             message: 'Unable to get report'});

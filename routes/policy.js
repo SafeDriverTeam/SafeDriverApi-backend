@@ -1,10 +1,17 @@
 const {Router} = require('express');
 const {policies} = require('../models');
+const { verifyJsonWebToken } = require('../utils/crypto');
 
 const router = Router();
 
 router.get('/getPolicyByVehicleId/:vehicleId', async(req, res)=>{
     const{vehicleId}= req.params;
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+    const decoded = await verifyJsonWebToken(token);      
+    if (!decoded || decoded.type != 'driver') {
+        return res.status(401).json('Unauthorized user');
+    }
     if(!vehicleId){
         return res.status(400).json({
             message: 'Missing required fields'
@@ -32,6 +39,12 @@ router.get('/getPolicyByVehicleId/:vehicleId', async(req, res)=>{
 
 router.get('/getById/:policyId', async(req, res)=>{
     const{policyId}=req.params;
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+    const decoded = await verifyJsonWebToken(token);      
+    if (!decoded || decoded.type != 'driver') {
+        return res.status(401).json('Unauthorized user');
+    }
     if(!policyId){
         return res.status(400).json({
             message: 'Missing required fields'
@@ -39,7 +52,7 @@ router.get('/getById/:policyId', async(req, res)=>{
     }
 
     try{
-        const policy = await policies.getByPolicyId(policyId);
+        const policy = await policies.getByPolicyID(policyId);
 
         if(!policy){
             return res.status(404).json({
