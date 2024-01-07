@@ -2,7 +2,7 @@
 FROM node:latest
 
 # Establece el directorio de trabajo dentro del contenedor
-WORKDIR /usr/src/app
+WORKDIR /safedriverapi-backend
 
 # Copia los archivos necesarios para la aplicación
 COPY package*.json ./
