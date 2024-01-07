@@ -1,0 +1,30 @@
+version: '3'
+services:
+  db:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Adg567Sjs0
+      MYSQL_DATABASE: safedriver
+      MYSQL_USER: safedriver
+      MYSQL_PASSWORD: Adg567Sjs0
+    ports:
+      - "3306:3306"
+
+  api:
+    build: ./SafeDriverApi-backend
+    restart: always
+    ports:
+      - "3001:3001"
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      NODE_ENV: development
+      DB_DEV_HOST: db
+      DB_DEV_USER: safedriver
+      DB_DEV_NAME: safedriver
+      DB_DEV_PASSWORD: Adg567Sjs0
+      TOKEN_SECRET_KEY: secret
+      TOKEN_EXPIRATION_TIME : 3600s
+      TOKEN_EXPIRATION_TIME_N : 3600

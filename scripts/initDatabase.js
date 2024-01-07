@@ -92,6 +92,19 @@ const initUserInitialData = async () => {
           });
         logger.info('Report created successfully.');
 
+        await reports.create({
+            declaration: "I crashed my car",
+            date: new Date(),
+            place: "Calle 456",
+            judgment: "",
+            policyId: 1,
+            involved: "Martin Perez",
+            vehiclesInvolved: "Ford Focus 2010",
+            driverId: 4,
+            userId: 3
+          });
+        logger.info('Report created successfully.');
+
         await imagesReports.create({
             image: "image1",
             reportId: 1,
