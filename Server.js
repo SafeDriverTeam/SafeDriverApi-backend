@@ -21,9 +21,10 @@ class Server {
     #initMiddlewares() {
         this.app.use(morgan((message) => this.logger.debug({ prefix: "[morgan]", message })));
         this.app.use(express.json());
-        var allowedOrigins = ['SafeDriver', 'http://localhost:3000'];
+        var allowedOrigins = ['SafeDriver', 'http://localhost:3000', 'http://10.0.2.2:3000'];
         this.app.use(cors({
             origin: function (origin, callback) {
+                console.log(origin);
                 if (allowedOrigins.indexOf(origin) === -1) {
                     callback('Origin not allowed by CORS');
                 } else {
@@ -42,10 +43,11 @@ class Server {
     }
 
     start() {
-        this.app.listen(this.config.port, () => {
-            this.logger.success(`Server started on port ${this.config.port}`);
+        this.app.listen(this.config.port, '0.0.0.0', () => {
+            this.logger.success(`Server started on ${'0.0.0.0'}:${this.config.port}`);
         });
     }
+    
 }
 
 module.exports = Server;
