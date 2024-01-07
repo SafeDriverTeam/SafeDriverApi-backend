@@ -116,6 +116,19 @@ module.exports = (sequelize) => {
         }
     });
 
+
+    Reflect.defineProperty(model, 'getReportsWithoutAdjuster', {
+        value: async function() {
+            return await this.findAll({
+                where: {
+                    userId: 1
+                },
+                attributes: ['reportId', 'declaration'] // Solo devuelve los campos necesarios
+            });
+        }
+    });
+    
+
     Reflect.defineProperty(model, 'getByDriverId', {
         value: async function(driverId) {
             return await this.findAll({
