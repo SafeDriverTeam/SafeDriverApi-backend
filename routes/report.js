@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { reports } = require('../models');
+const { reports, policies, users, vehicles } = require('../models');
 const { verifyJsonWebToken } = require('../utils/crypto');
 const router = Router();
 
@@ -22,6 +22,26 @@ router.get('/getByAdjuster/:adjusterId', async (req, res) => {
     try {
         const reportList = await reports.getByAdjusterId(adjusterId);
 
+        
+        if (reportList.length > 0) {
+            const enhancedReportList = await Promise.all(reportList.map(async (report) => {
+                const policy = await policies.getByPolicyId(report.policyId);
+                const vehicle = await vehicles.getByVehicleId(policy.vehicleId);
+                const user = await users.getByUserId(policy.userId);
+
+                return {
+                    report,
+                    policy,
+                    vehicle,
+                    user: {
+                        name: user.name,
+                        surnames: user.surnames
+                    }
+                };
+            }));
+
+            return res.status(200).json({ reportList: enhancedReportList });
+        }
         return res.status(200).json({ reportList });
     } catch (error) {
         return res.status(500).json({
