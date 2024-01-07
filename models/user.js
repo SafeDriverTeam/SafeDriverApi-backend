@@ -79,5 +79,15 @@ module.exports = (sequelize) => {
         }
     });
 
+    Reflect.defineProperty(model, 'getAdjusters', {
+        value: async function() {
+            return await this.findAll({
+                where: { type: 'adjuster' },
+                attributes: ['userId', 'name', 'surnames']
+            });
+        }
+    });
+    
+
     return model;
 }

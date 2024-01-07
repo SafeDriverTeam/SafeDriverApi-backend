@@ -51,5 +51,25 @@ router.get('/getPoliciesByUserId/:userId', async (req, res) => {
     }
 });
 
+router.post('/createPolicy', async (req, res) => {
+    const { acquisitionDate, amount, expirationDate, vehicleId, userId, typePolicy } = req.body;
+
+    if (!acquisitionDate || !amount || !expirationDate || !vehicleId || !typePolicy) {
+        return res.status(400).json({
+            message: 'Missing required fields'
+        });
+    }
+
+    try {
+        const newPolicy = await policies.createPolicy(acquisitionDate, amount, expirationDate, vehicleId, userId, typePolicy);
+        return res.status(201).json(newPolicy);
+    } catch (error) {
+        console.error('Error creating policy:', error);
+        return res.status(500).json({
+            message: 'Unable to create Policy'
+        });
+    }
+});
+
 
 module.exports = router;
