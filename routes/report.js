@@ -1,6 +1,8 @@
 const { Router } = require('express');
 const { reports, policies, users, vehicles } = require('../models');
 const { verifyJsonWebToken } = require('../utils/crypto');
+const { reports } = require('../models');
+const { users } = require('../models');
 const router = Router();
 
 router.get('/getByAdjuster/:adjusterId', async (req, res) => {
@@ -228,6 +230,29 @@ router.get('/getByDriverId/:driverId', async (req, res) => {
     } catch(error) {
         return res.status(500).json({
             message: 'Unable to get report'});
+    }
+});
+
+router.get('/getReportsWithoutAdjuster', async (req, res) => {
+    try {
+        const reportsWithoutAdjuster = await reports.getReportsWithoutAdjuster();
+        // Verifica que la respuesta contiene los campos correctos
+        console.log(reportsWithoutAdjuster);
+        res.json(reportsWithoutAdjuster);
+    } catch (error) {
+        res.status(500).json({ message: 'Unable to get reports' });
+    }
+});
+
+
+
+router.get('/adjusters', async (req, res) => {
+    try {
+        const adjusters = await users.getAdjusters();
+        res.json(adjusters);
+        console.log(adjusters)
+    } catch (error) {
+        res.status(500).json({ message: 'Error al obtener los ajustadores' });
     }
 });
 
