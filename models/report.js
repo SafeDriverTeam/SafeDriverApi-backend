@@ -121,7 +121,7 @@ module.exports = (sequelize) => {
         value: async function() {
             return await this.findAll({
                 where: {
-                    userId: null
+                    userId: 1
                 },
                 attributes: ['reportId', 'declaration'] // Solo devuelve los campos necesarios
             });

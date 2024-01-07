@@ -1,8 +1,6 @@
 const { Router } = require('express');
 const { reports, policies, users, vehicles } = require('../models');
 const { verifyJsonWebToken } = require('../utils/crypto');
-const { reports } = require('../models');
-const { users } = require('../models');
 const router = Router();
 
 router.get('/getByAdjuster/:adjusterId', async (req, res) => {
