@@ -28,7 +28,7 @@ router.get('/getByReportId/:reportId', async(req, res)=>{
             });
         }
 
-        return res.status(200).json(images);
+        return res.status(200).json({images});
     }catch(error){
         return res.status(500).json({
             message: 'Unable to get images'
