@@ -21,18 +21,20 @@ class Server {
     #initMiddlewares() {
         this.app.use(morgan((message) => this.logger.debug({ prefix: "[morgan]", message })));
         this.app.use(express.json());
-        var allowedOrigins = ['SafeDriver', 'http://localhost:3000', 'http://10.0.2.2:3000'];
+        var allowedOrigins = ['http://192.168.1.104:3000', 'http://localhost:3000'];
+    
         this.app.use(cors({
             origin: function (origin, callback) {
-                console.log(origin);
                 if (allowedOrigins.indexOf(origin) === -1) {
                     callback('Origin not allowed by CORS');
                 } else {
                     callback(null, true)
                 }
-            }
+            },
+            exposedHeaders: ['ETag']
         }));
     }
+    
 
     #initRoutes() {
         this.#setRouteHandler("/auth", "./routes/auth.js");

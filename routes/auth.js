@@ -55,10 +55,7 @@ router.post('/signup', async (req, res) => {
             email, 
             await calculateSHA256Hash(password), 
             "driver");
-        
-        console.log(user);
         const token = generateJsonWebToken(user.email, user.type);
-        
         return res.status(201).json({
             message: 'User created successfully',
             token,

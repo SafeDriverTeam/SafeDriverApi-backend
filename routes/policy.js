@@ -28,7 +28,6 @@ router.get('/getPolicyByVehicleId/:vehicleId', async(req, res)=>{
         }
         return res.status(200).json(policy)
     }catch(error){
-        console.log(error);
         return res.status(500).json({
             message: 'Unable to get Policy'
         });
@@ -95,7 +94,6 @@ router.post('/createPolicy', async(req, res)=>{
             policyId: policy.policyId
         });
     }catch(error){
-        console.log(error);
         return res.status(500).json({
             message: 'Unable to create policy'
         });
@@ -120,7 +118,6 @@ router.get('/getPoliciesByUserId/:userId', async (req, res) => {
         }
         return res.status(200).json(userPolicies);
     } catch (error) {
-        console.error('Error fetching policies:', error);
         return res.status(500).json({
             message: 'Unable to get Policies'
         });

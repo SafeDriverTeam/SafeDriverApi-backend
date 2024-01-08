@@ -90,7 +90,7 @@ router.post('/createReport', async (req, res) => {
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1]
     const decoded = await verifyJsonWebToken(token);
-        
+       
     if (!decoded || decoded.type != 'driver') {
         return res.status(401).json('Unauthorized user');
     }
@@ -99,7 +99,7 @@ router.post('/createReport', async (req, res) => {
             message: 'Missing required fields'
         });
     }
-
+ 
     try {
         const report = await reports.createReport(
             declaration,
@@ -112,13 +112,13 @@ router.post('/createReport', async (req, res) => {
             userId,
             driverId
         );
-
-        if(!report) {   
+ 
+        if(!report) {  
             return res.status(500).json({
                 message: 'Unable to create report'
             });
         }
-
+ 
         return res.status(201).json({
             message: 'Report created successfully',
             reportId: report.reportId
@@ -193,7 +193,6 @@ router.put('/updateReportJudgment', async (req, res) => {
 
 
     } catch(error) {
-        console.log(error);
         return res.status(500).json({
             message: 'Unable to update report'
         });
@@ -234,8 +233,6 @@ router.get('/getByDriverId/:driverId', async (req, res) => {
 router.get('/getReportsWithoutAdjuster', async (req, res) => {
     try {
         const reportsWithoutAdjuster = await reports.getReportsWithoutAdjuster();
-        // Verifica que la respuesta contiene los campos correctos
-        console.log(reportsWithoutAdjuster);
         res.json(reportsWithoutAdjuster);
     } catch (error) {
         res.status(500).json({ message: 'Unable to get reports' });
@@ -248,7 +245,6 @@ router.get('/adjusters', async (req, res) => {
     try {
         const adjusters = await users.getAdjusters();
         res.json(adjusters);
-        console.log(adjusters)
     } catch (error) {
         res.status(500).json({ message: 'Error al obtener los ajustadores' });
     }

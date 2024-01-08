@@ -23,7 +23,6 @@ router.get('/getVehicleByUserId/:userId', async(req, res)=>{
 
         return res.status(200).json(vehicle);
     }catch(error){
-        console.log(error);
         return res.status(500).json({
             message: 'Unable to get vehicle'});
     }
